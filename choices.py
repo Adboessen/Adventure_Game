@@ -67,8 +67,54 @@ class Choices(object):
                 templeChoice = input(f'''
                                      You arrive at an ancient temple 
                                      (1) Go inside
-                                     (2) 
+                                     (2) Continue further into the jungle
                                      ''')
+                if templeChoice == '1':
+                    doorChoice = input(f'''
+                                        There are two dark passages
+                                        (1) Left
+                                        (2) Right
+                                        ''')
+                    if doorChoice == '1':
+                        print(f'''
+                              The floor crumbles and you fall into a pit
+                              ''')
+                        Path.ending
+                    elif doorChoice == '2':
+                        throneChoice = input(f'''
+                              You arrive at a throne room covered in gold
+                              (1) Look around
+                              (2) Take the gold
+                              ''')
+                        if throneChoice == '1':
+                            leverChoice = input(f'''
+                                                You see three levers on the wall of differnt length
+                                                (1) Short
+                                                (2) Medium
+                                                (3) Long
+                                                ''')
+                            if leverChoice == '1':
+                                print(f'''
+                                      Arrows shoot out from the walls and kill you
+                                      ''')
+                                Path.ending
+                            elif leverChoice == '2':
+                                print(f'''
+                                      A rock fall infront of the door trapping you
+                                      ''')
+                                Path.ending
+                            elif leverChoice == '3':
+                                
+                        elif throneChoice == '2':
+                            print(f'''
+                                  A trap is set off and you are crushed by a giant boulder
+                                  ''')
+                            Path.ending
+                elif templeChoice == '2':
+                    print(f'''
+                          You are seen a captured by a group of native hunters
+                          ''')
+                    Path.ending
             elif villageChoice == '2':
                 print(f'''
                       You are captured by the village people and sacrifed to the gods
