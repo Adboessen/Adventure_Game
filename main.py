@@ -1,9 +1,9 @@
-from choices import Choices
+from Classes import Classes
 from path import Path
 
 def menu():
     menuChoice = input(f'''
-                       ----SURVIVOR----
+                       ----DESTINY----
                        (1) Start Game
                        (2) Exit
                        Enter Choice: ''')
