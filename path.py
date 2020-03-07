@@ -1,4 +1,4 @@
-from Classes import Classes
+from Objects import Objects
 
 class Path(object):
     def __init__(self):
@@ -15,25 +15,35 @@ class Path(object):
                 (2) Warlock
                 (3) Titan'''))
         if self.characterClass == '1':
-            Classes.hunter()
+            Objects.hunter()
         elif self.characterClass == '2':
-            Classes.warlock()
+            Objects.warlock()
         elif self.characterClass == '3':
-            Classes.titan()
+            Objects.titan()
             
     def shop(self):
         shopChoice = input(f'''
                              -----SHOP-----
-                           (1) Buy Consumable
+                           (1) Buy Armour
                            (2) Buy Weapons
                            (3) Reload Weapon
                            ''')
         if shopChoice == '1':
-            cunsumableChoice = input(f'''
-                                     (1) Orb of Light
-                                     (2) Health
-                                     (3) Damage
-                                     ''')
+            armourChoice = int(input(f'''
+                                 ----ARMOUR----
+                                 (1) Helmet ${Objects.helmet['price']}
+                                 (2) Chest Plate ${Objects.chestPlate['price']}
+                                 (3) Gauntlets ${Objects.gauntlets['price']}
+                                 (4) Boots ${Objects.boots['price']}
+                                 '''))
+            if armourChoice == '1':
+                if Objects.money > Objects.helmet['price']:
+                    Objects.armour.append(Objects.helmet)
+                    Objects.hp += Objects.helmet['hpAdded']
+                    Objects.money -= Objects.helmet['price']
+            elif armourChoice == '2':
+            elif armourChoice == '3':
+            elif armourChoice == '4':
         elif shopChoice == '2':
         elif shopChoice == '3':
     def battle(self):
@@ -48,3 +58,4 @@ class Path(object):
         self.ending()
         
         
+ 
