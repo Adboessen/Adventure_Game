@@ -13,7 +13,8 @@ class Path(object):
                 Choose Class:
                 (1) Hunter
                 (2) Warlock
-                (3) Titan'''))
+                (3) Titan
+                '''))
         if self.characterClass == '1':
             Objects.hunter()
         elif self.characterClass == '2':
@@ -51,14 +52,14 @@ class Path(object):
             for i in range(len(Objects.weaponList)):
                 print(f'''
                             -----WEAPONS-----
-                            ({i}) {Objects.weaponList[i['name']]} ${Objects.wepaonList[i['price']]}
+                            ({i}) {Objects.weaponList[i['name']]} ${Objects.weaponList[i['price']]}
                             ''')
             weaponChoice = input("Enter Number: ")
         elif shopChoice == '3':
             print("Choose Weapon")
             for i in range(len(Objects.weapons)):
                 print(f'''({i}) {Objects.weapons[i['name']]} Ammo left: {Objects.weapons[i['ammo']]}''')
-            ammoChoice = input("Enter Choice: ")
+            ammoChoice = input("Enter Number: ")
             for i in range((Objects.weapons)):
                 if ammoChoice == 'i - 1':
                     if Objects.money > ((Objects.weapons[i['magSize']] - Objects.weapons[i['ammo']]) * Objects.weapons[i['ammoPrice']]):
@@ -72,6 +73,8 @@ class Path(object):
         else:
             print("Exiting Shop")
     def battle(self):
+        print("battling")
+        self.shop()
         
     def ending(self):
         print(f'''
