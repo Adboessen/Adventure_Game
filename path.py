@@ -62,20 +62,19 @@ class Path(object):
             #prints all armour
             for i in range(len(Objects.armourList)):
                 armourPointer = Objects.armourList[i]
-                print(f'''                        ({i + 1}) {armourPointer['name']} ${armourPointer['price']}''')
+                print(f'''                        ({i + 1}) [{armourPointer['name']}] ${armourPointer['price']}''')
             armourChoice = int(input("Enter Number: "))
             #gets selected armour info and uses it to do stuff
-            for i in range(len(Objects.armourList)):
-                armourPointer = Objects.armourList[i]    
-                if armourChoice == (i - 1):
-                    if Objects.money > armourPointer['price'] and armourPointer['owned'] == False:
-                        Objects.armour.append(Objects.armourList[i])
-                        armourPointer['owned'] == True
-                        Objects.hp += armourPointer['hpAdded']
-                        Objects.money -= armourPointer['price']
-                    else:
-                        print("Not enough money")
-                        self.shop()
+            armourPointer = Objects.armourList[(armourChoice - 1)]    
+            if Objects.money >= armourPointer['price'] and armourPointer['owned'] == False:
+                Objects.armour.append(Objects.armourList[i])
+                armourPointer['owned'] == True
+                Objects.hp += armourPointer['hpAdded']
+                Objects.money -= armourPointer['price']
+                self.shop()
+            else:
+                print("Not enough money or already owned")
+                self.shop()
                         
         elif shopChoice == 2:
             print(f'''
@@ -83,47 +82,47 @@ class Path(object):
             #prints all weapons
             for i in range(len(Objects.weaponList)):
                 weaponPointer = Objects.weaponList[i]
-                print(f'''                        ({i + 1}) {weaponPointer['name']} ${weaponPointer['price']}''')                   
+                print(f'''                        ({i + 1}) [{weaponPointer['name']}] ${weaponPointer['price']}''')                   
             weaponChoice = int(input("Enter Number: "))
             #gets chosen weapon info and does more stuff
-            for i in range(len(Objects.weaponList)):
-                weaponPointer = Objects.weaponList[i]
-                if weaponChoice == i - 1:
-                    if Objects.money > weaponPointer['price'] and weaponPointer['owned'] == False:
-                        Objects.weapons.append(Objects.weaponList[i])
-                        armourPointer['owned'] == True
-                        Objects.money -= armourPointer['price']
-                    else:
-                        print("Not enough money")
-                        self.shop()
+            weaponPointer = Objects.weaponList[(weaponChoice - 1)]
+            if Objects.money >= weaponPointer['price'] and weaponPointer['owned'] == False:
+                Objects.weapons.append(Objects.weaponList[i])
+                armourPointer['owned'] == True
+                Objects.money -= armourPointer['price']
+                self.shop()
+            else:
+                print("Not enough money or already owned")
+                self.shop()
             
         elif shopChoice == 3:
             print("Choose Weapon")
             #lists all owned weapons
             for i in range(len(Objects.weapons)):
                 ammoPointer = Objects.weapons[i]
-                print(f'''({i + 1}) {ammoPointer['name']} Ammo left: {ammoPointer['ammo']}''')
+                print(f'''({i + 1}) [{ammoPointer['name']}] Ammo left: {ammoPointer['ammo']}''')
             ammoChoice = int(input("Enter Number: "))
             #gets weapons chosen and refills the magazine
-            for i in range(len(Objects.weapons)):
-                ammoPointer = Objects.weapons[i]
-                if ammoChoice == i - 1:
-                    if Objects.money > ((ammoPointer['magSize'] - ammoPointer['ammo']) * ammoPointer['ammoPrice']):
-                        Objects.money -= ((ammoPointer['magSize'] - ammoPointer['ammo']) * ammoPointer['ammoPrice'])
-                        while ammoPointer['magSize'] > ammoPointer['ammo']:
-                            ammoPointer['ammo'] += 1
-                        print("Magazine Filled")
-                    else:
-                        print("Not enough money")
-                        self.shop()
+            ammoPointer = Objects.weapons[(ammoChoice - 1)]
+            if Objects.money > ((ammoPointer['magSize'] - ammoPointer['ammo']) * ammoPointer['ammoPrice']) and ammoPointer['ammo'] < ammoPointer['magSize']:
+                Objects.money -= ((ammoPointer['magSize'] - ammoPointer['ammo']) * ammoPointer['ammoPrice'])
+                while ammoPointer['magSize'] > ammoPointer['ammo']:
+                    ammoPointer['ammo'] += 1
+                print("Magazine Filled")
+                self.shop()
+            else:
+                print("Not enough money or mag full")
+                self.shop()
+                
         else:
-            print("Exiting Shop")
+            print("Exiting Shop...")
             
     def battle(self):
-        print("Entering Battle")
+        print("ENTERING BATTLE")
         for e in range(len(Objects.enemiesList)):
             enemy = Objects.enemiesList[e]
             Objects.hp = Objects.maxHp
+            print("NEW ENEMY: " + enemy['name'])
             while Objects.hp > 0 and enemy['health'] > 0:
                 self.shop()
                 critRandom = random.randint(1,100)
@@ -132,23 +131,31 @@ class Path(object):
                 for i in range(len(Objects.weapons)):
                     weaponPointer = Objects.weapons[i]
                     print(f'''
-                      ({i + 1}) {weaponPointer['name']} Damage: {weaponPointer['damage']} Ammo: {weaponPointer['ammo']}
+                      ({i + 1}) [{weaponPointer['name']}] Damage: {weaponPointer['damage']} Ammo: {weaponPointer['ammo']}
                       ''')
                 weaponChoice = int(input("Enter Number: "))
                 selectedWeapon = Objects.weapons[(weaponChoice - 1)]
+                if selectedWeapon['ammo'] > 0:
                 #deals damage based on crit or not
-                if critRandom <= Objects.critChance:
-                    enemy['health'] -= (selectedWeapon['damage'] * 1.5)
-                    print("CRIT!!! You dealt " + str((selectedWeapon['damage'] * 1.5)) + " damage")
-                    selectedWeapon['ammo'] -= 1
-                else:   
-                    enemy['health'] -= selectedWeapon['damage']
-                    print("You dealt " + str(selectedWeapon['damage']) + " damage")
-                    selectedWeapon['ammo'] -= 1
-                #gain money for damage done
-                Objects.money += (selectedWeapon['damage'] * 2)
-                #super charged by damage
-                Objects.superCharge += (selectedWeapon['damage'] + .5)
+                    if critRandom <= Objects.critChance:
+                        enemy['health'] -= (selectedWeapon['damage'] * 1.5)
+                        print("CRIT!!! You dealt " + str((selectedWeapon['damage'] * 1.5)) + " damage")
+                        selectedWeapon['ammo'] -= 1
+                        #gain money for damage done
+                        Objects.money += (selectedWeapon['damage'] * 2)
+                        #super charged by damage
+                        Objects.superCharge += (selectedWeapon['damage'] + .5)
+                    else:   
+                        enemy['health'] -= selectedWeapon['damage']
+                        print("You dealt " + str(selectedWeapon['damage']) + " damage")
+                        selectedWeapon['ammo'] -= 1
+                        #gain money for damage done
+                        Objects.money += (selectedWeapon['damage'] * 2)
+                        #super charged by damage
+                        Objects.superCharge += (selectedWeapon['damage'] + .5)
+                else:
+                    print("Out of ammo")
+                
                 #uses super if charge is full
                 if Objects.superCharge >= 100:
                     playerSuper = Objects.super[i]
@@ -158,7 +165,7 @@ class Path(object):
                                            (2) Keep Super
                                            '''))
                     if superInput == 1:
-                        for i in range(super['strength']):
+                        for i in range(int(super['strength'])):
                             print("Super dealt " + playerSuper['damage'])
                             enemy['health'] -= playerSuper['damage']
                         Objects.superCharge = 0
