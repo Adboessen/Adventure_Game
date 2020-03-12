@@ -50,6 +50,7 @@ class Path(object):
     def shop(self):
         shopChoice = int(input(f'''
                         -----SHOP-----
+                        Money: ${Objects.money}
                         (1) Buy Armour
                         (2) Buy Weapons
                         (3) Reload Weapon
@@ -66,7 +67,7 @@ class Path(object):
             #gets selected armour info and uses it to do stuff
             for i in range(len(Objects.armourList)):
                 armourPointer = Objects.armourList[i]    
-                if armourChoice == i - 1:
+                if armourChoice == (i - 1):
                     if Objects.money > armourPointer['price'] and armourPointer['owned'] == False:
                         Objects.armour.append(Objects.armourList[i])
                         armourPointer['owned'] == True
@@ -122,6 +123,7 @@ class Path(object):
         print("Entering Battle")
         for e in range(len(Objects.enemiesList)):
             enemy = Objects.enemiesList[e]
+            Objects.hp = Objects.maxHp
             while Objects.hp > 0 and enemy['health'] > 0:
                 self.shop()
                 critRandom = random.randint(1,100)
@@ -130,29 +132,44 @@ class Path(object):
                 for i in range(len(Objects.weapons)):
                     weaponPointer = Objects.weapons[i]
                     print(f'''
-                      ({i + 1}) {weaponPointer['name']} Damage: {weaponPointer['damage']}
+                      ({i + 1}) {weaponPointer['name']} Damage: {weaponPointer['damage']} Ammo: {weaponPointer['ammo']}
                       ''')
                 weaponChoice = int(input("Enter Number: "))
-                selectedWeapon = Objects.weapons[weaponChoice - 1]
+                selectedWeapon = Objects.weapons[(weaponChoice - 1)]
                 #deals damage based on crit or not
                 if critRandom <= Objects.critChance:
                     enemy['health'] -= (selectedWeapon['damage'] * 1.5)
-                    print("CRIT!!! You dealt " + (selectedWeapon['damage'] * 1.5) + " damage")
+                    print("CRIT!!! You dealt " + str((selectedWeapon['damage'] * 1.5)) + " damage")
+                    selectedWeapon['ammo'] -= 1
                 else:   
                     enemy['health'] -= selectedWeapon['damage']
-                    print("You dealt " + selectedWeapon['damage'] + " damage")
+                    print("You dealt " + str(selectedWeapon['damage']) + " damage")
+                    selectedWeapon['ammo'] -= 1
                 #gain money for damage done
-                Objects.money += selectedWeapon['damage'] * 2
+                Objects.money += (selectedWeapon['damage'] * 2)
                 #super charged by damage
                 Objects.superCharge += (selectedWeapon['damage'] + .5)
+                #uses super if charge is full
+                if Objects.superCharge >= 100:
+                    playerSuper = Objects.super[i]
+                    superInput = int(input(f'''
+                                           {playerSuper['name']} is charged
+                                           (1) Use Super 
+                                           (2) Keep Super
+                                           '''))
+                    if superInput == 1:
+                        for i in range(super['strength']):
+                            print("Super dealt " + playerSuper['damage'])
+                            enemy['health'] -= playerSuper['damage']
+                        Objects.superCharge = 0
                 #damaged by enemy
                 Objects.hp -= enemy['damage']
-                print("You took " + enemy['damage'] + " damage")
+                print("You took " + str(enemy['damage']) + " damage")
                 #print ui of player and enemy
                 print(f'''
-                      {self.playerName}                         {enemy['name']}
-                      Weapon: {selectedWeapon['name']}          Damage: {enemy['damage']}
-                      HP: {Objects.hp}                          HP: {enemy['health']}
+                      [{self.playerName}]                         [{enemy['name']}]
+                      Weapon: {selectedWeapon['name']}            Damage: {enemy['damage']}
+                      HP: {Objects.hp}                            HP: {enemy['health']}
                       Super Charge: {Objects.superCharge}/100
                       Money: ${Objects.money}
                       ''')
