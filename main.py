@@ -1,6 +1,5 @@
 from path import Path
 
-
 menuChoice = input(f'''
                 ----DESTINY----
                 (1) Start Game
