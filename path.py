@@ -68,9 +68,10 @@ class Path(object):
             armourPointer = Objects.armourList[(armourChoice - 1)]    
             if Objects.money >= armourPointer['price'] and armourPointer['owned'] == False:
                 Objects.armour.append(Objects.armourList[i])
-                armourPointer['owned'] == True
+                armourPointer['owned'] = True
                 Objects.hp += armourPointer['hpAdded']
                 Objects.money -= armourPointer['price']
+                print("You purchased " + armourPointer['name'])
                 self.shop()
             else:
                 print("Not enough money or already owned")
@@ -88,8 +89,9 @@ class Path(object):
             weaponPointer = Objects.weaponList[(weaponChoice - 1)]
             if Objects.money >= weaponPointer['price'] and weaponPointer['owned'] == False:
                 Objects.weapons.append(Objects.weaponList[i])
-                armourPointer['owned'] == True
-                Objects.money -= armourPointer['price']
+                weaponPointer['owned'] = True
+                Objects.money -= weaponPointer['price']
+                print("You purchased" + weaponPointer['name'])
                 self.shop()
             else:
                 print("Not enough money or already owned")
@@ -127,12 +129,12 @@ class Path(object):
                 self.shop()
                 critRandom = random.randint(1,100)
                 #choose weapon to use
-                print("Choose weapon for attack")
+                print(f'''
+                      CHOOSE WEAPON FOR ATTACK''')
                 for i in range(len(Objects.weapons)):
                     weaponPointer = Objects.weapons[i]
                     print(f'''
-                      ({i + 1}) [{weaponPointer['name']}] Damage: {weaponPointer['damage']} Ammo: {weaponPointer['ammo']}
-                      ''')
+                      ({i + 1}) [{weaponPointer['name']}] Damage: {weaponPointer['damage']} Ammo: {weaponPointer['ammo']}''')
                 weaponChoice = int(input("Enter Number: "))
                 selectedWeapon = Objects.weapons[(weaponChoice - 1)]
                 if selectedWeapon['ammo'] > 0:
@@ -142,7 +144,7 @@ class Path(object):
                         print("CRIT!!! You dealt " + str((selectedWeapon['damage'] * 1.5)) + " damage")
                         selectedWeapon['ammo'] -= 1
                         #gain money for damage done
-                        Objects.money += (selectedWeapon['damage'] * 2)
+                        Objects.money += (selectedWeapon['damage'] * 10)
                         #super charged by damage
                         Objects.superCharge += (selectedWeapon['damage'] + .5)
                     else:   
@@ -150,7 +152,7 @@ class Path(object):
                         print("You dealt " + str(selectedWeapon['damage']) + " damage")
                         selectedWeapon['ammo'] -= 1
                         #gain money for damage done
-                        Objects.money += (selectedWeapon['damage'] * 2)
+                        Objects.money += (selectedWeapon['damage'] * 10)
                         #super charged by damage
                         Objects.superCharge += (selectedWeapon['damage'] + .5)
                 else:
@@ -160,13 +162,13 @@ class Path(object):
                 if Objects.superCharge >= 100:
                     playerSuper = Objects.super[i]
                     superInput = int(input(f'''
-                                           {playerSuper['name']} is charged
-                                           (1) Use Super 
-                                           (2) Keep Super
-                                           '''))
+                            {playerSuper['name']} is charged
+                            (1) Use Super 
+                            (2) Keep Super
+                            Enter Choice: '''))
                     if superInput == 1:
-                        for i in range(int(super['strength'])):
-                            print("Super dealt " + playerSuper['damage'])
+                        for i in range(int(playerSuper['strength'])):
+                            print("Super dealt " + str(playerSuper['damage']))
                             enemy['health'] -= playerSuper['damage']
                         Objects.superCharge = 0
                 #damaged by enemy
@@ -174,7 +176,7 @@ class Path(object):
                 print("You took " + str(enemy['damage']) + " damage")
                 #print ui of player and enemy
                 print(f'''
-                      [{self.playerName}]                         [{enemy['name']}]
+                      [{self.playerName}]            VS.             [{enemy['name']}]
                       Weapon: {selectedWeapon['name']}            Damage: {enemy['damage']}
                       HP: {Objects.hp}                            HP: {enemy['health']}
                       Super Charge: {Objects.superCharge}/100
@@ -190,12 +192,10 @@ class Path(object):
         print("You have beat the game")
     
     def endingLost(self):
-        print("You have lost the game. Returning to menu...")
+        print("You have lost the game. Restarting...")
         self.start()
         
     def run(self):
         self.start()
         self.battle()
-        
-        
  
