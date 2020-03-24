@@ -15,6 +15,15 @@ class Path(object):
                 (2) Warlock
                 (3) Titan
                 Enter Choice: '''))
+        #checks if input is out of range
+        while self.characterClass > 3 or self.characterClass < 1:
+            print("Input out of range")
+            self.characterClass = int(input(f'''
+                Choose Class:
+                (1) Hunter
+                (2) Warlock
+                (3) Titan
+                Enter Choice: '''))
         #sets starting values for player data based on class
         if self.characterClass == 1:
             Objects.weapons.append(Objects.AceofSpades)
@@ -65,7 +74,7 @@ class Path(object):
                 print(f'''                        ({i + 1}) [{armourPointer['name']}] ${armourPointer['price']}''')
             armourChoice = int(input("Enter Number: "))
             #checks if choice is valid
-            while armourChoice > (len(Objects.armourList) + 1):
+            while armourChoice > len(Objects.armourList) or armourChoice < 1:
                 print("Input is out of range. Enter new choice")
                 armourChoice = int(input("Enter Number: "))
             #gets selected armour info and uses it to do stuff
@@ -90,7 +99,7 @@ class Path(object):
                 print(f'''                        ({i + 1}) [{weaponPointer['name']}] ${weaponPointer['price']}''')                   
             weaponChoice = int(input("Enter Number: "))
             #checks if choice is valid
-            while weaponChoice > (len(Objects.weaponList) + 1):
+            while weaponChoice > len(Objects.weaponList) or weaponChoice < 1:
                 print("Input is out of range. Enter new choice")
                 weaponChoice = int(input("Enter Number: ")) 
             #gets chosen weapon info and does more stuff
@@ -113,7 +122,7 @@ class Path(object):
                 print(f'''({i + 1}) [{ammoPointer['name']}] Ammo left: {ammoPointer['ammo']}''')
             ammoChoice = int(input("Enter Number: "))
             #checks if input is valid
-            while ammoChoice > (len(Objects.weapons) + 1):
+            while ammoChoice > len(Objects.weapons) or ammoChoice < 1:
                 print("Input is out of range. Enter new choice")
                 ammoChoice = int(input("Enter Number: "))  
             #gets weapons chosen and refills the magazine
@@ -133,6 +142,12 @@ class Path(object):
             
     def battle(self):
         print("ENTERING BATTLE")
+        print(f'''
+                    HOW TO PLAY
+        You and an enemy takes turn dealing damage
+        After each turn you get access to the shop
+        Defeat all 4 enemies and win the game
+        ''')
         for e in range(len(Objects.enemiesList)):
             enemy = Objects.enemiesList[e]
             Objects.hp = Objects.maxHp
@@ -149,13 +164,14 @@ class Path(object):
                       ({i + 1}) [{weaponPointer['name']}] Damage: {weaponPointer['damage']} Ammo: {weaponPointer['ammo']}''')
                 weaponChoice = int(input("Enter Number: "))
                 #checks if input is valid
-                while weaponChoice > (len(Objects.weaponList) + 1):
+                while weaponChoice > len(Objects.weapons) or weaponChoice < 1:
                     print("Input is out of range. Enter new choice")
                     weaponChoice = int(input("Enter Number: ")) 
                 selectedWeapon = Objects.weapons[(weaponChoice - 1)]
                 if selectedWeapon['ammo'] > 0:
                 #deals damage based on crit or not
                     critRandom = random.randint(1,100)
+                    print("")
                     if critRandom <= Objects.critChance:
                         enemy['health'] -= (selectedWeapon['damage'] * 1.5)
                         print("CRIT!!! You dealt " + str((selectedWeapon['damage'] * 1.5)) + " damage")
