@@ -64,8 +64,12 @@ class Path(object):
                 armourPointer = Objects.armourList[i]
                 print(f'''                        ({i + 1}) [{armourPointer['name']}] ${armourPointer['price']}''')
             armourChoice = int(input("Enter Number: "))
+            #checks if choice is valid
+            while armourChoice > (len(Objects.armourList) + 1):
+                print("Input is out of range. Enter new choice")
+                armourChoice = int(input("Enter Number: "))
             #gets selected armour info and uses it to do stuff
-            armourPointer = Objects.armourList[(armourChoice - 1)]    
+            armourPointer = Objects.armourList[(armourChoice - 1)]   
             if Objects.money >= armourPointer['price'] and armourPointer['owned'] == False:
                 Objects.armour.append(Objects.armourList[i])
                 armourPointer['owned'] = True
@@ -85,6 +89,10 @@ class Path(object):
                 weaponPointer = Objects.weaponList[i]
                 print(f'''                        ({i + 1}) [{weaponPointer['name']}] ${weaponPointer['price']}''')                   
             weaponChoice = int(input("Enter Number: "))
+            #checks if choice is valid
+            while weaponChoice > (len(Objects.weaponList) + 1):
+                print("Input is out of range. Enter new choice")
+                weaponChoice = int(input("Enter Number: ")) 
             #gets chosen weapon info and does more stuff
             weaponPointer = Objects.weaponList[(weaponChoice - 1)]
             if Objects.money >= weaponPointer['price'] and weaponPointer['owned'] == False:
@@ -104,6 +112,10 @@ class Path(object):
                 ammoPointer = Objects.weapons[i]
                 print(f'''({i + 1}) [{ammoPointer['name']}] Ammo left: {ammoPointer['ammo']}''')
             ammoChoice = int(input("Enter Number: "))
+            #checks if input is valid
+            while ammoChoice > (len(Objects.weapons) + 1):
+                print("Input is out of range. Enter new choice")
+                ammoChoice = int(input("Enter Number: "))  
             #gets weapons chosen and refills the magazine
             ammoPointer = Objects.weapons[(ammoChoice - 1)]
             if Objects.money > ((ammoPointer['magSize'] - ammoPointer['ammo']) * ammoPointer['ammoPrice']) and ammoPointer['ammo'] < ammoPointer['magSize']:
@@ -125,9 +137,9 @@ class Path(object):
             enemy = Objects.enemiesList[e]
             Objects.hp = Objects.maxHp
             print("NEW ENEMY: " + enemy['name'])
+            #loops battle sequence until enemy or player dies
             while Objects.hp > 0 and enemy['health'] > 0:
                 self.shop()
-                critRandom = random.randint(1,100)
                 #choose weapon to use
                 print(f'''
                       CHOOSE WEAPON FOR ATTACK''')
@@ -136,9 +148,14 @@ class Path(object):
                     print(f'''
                       ({i + 1}) [{weaponPointer['name']}] Damage: {weaponPointer['damage']} Ammo: {weaponPointer['ammo']}''')
                 weaponChoice = int(input("Enter Number: "))
+                #checks if input is valid
+                while weaponChoice > (len(Objects.weaponList) + 1):
+                    print("Input is out of range. Enter new choice")
+                    weaponChoice = int(input("Enter Number: ")) 
                 selectedWeapon = Objects.weapons[(weaponChoice - 1)]
                 if selectedWeapon['ammo'] > 0:
                 #deals damage based on crit or not
+                    critRandom = random.randint(1,100)
                     if critRandom <= Objects.critChance:
                         enemy['health'] -= (selectedWeapon['damage'] * 1.5)
                         print("CRIT!!! You dealt " + str((selectedWeapon['damage'] * 1.5)) + " damage")
@@ -176,7 +193,7 @@ class Path(object):
                 print("You took " + str(enemy['damage']) + " damage")
                 #print ui of player and enemy
                 print(f'''
-                      [{self.playerName}]            VS.             [{enemy['name']}]
+                      [{self.playerName}]            VS.          [{enemy['name']}]
                       Weapon: {selectedWeapon['name']}            Damage: {enemy['damage']}
                       HP: {Objects.hp}                            HP: {enemy['health']}
                       Super Charge: {Objects.superCharge}/100
@@ -192,8 +209,7 @@ class Path(object):
         print("You have beat the game")
     
     def endingLost(self):
-        print("You have lost the game. Restarting...")
-        self.start()
+        print("You have lost the game")
         
     def run(self):
         self.start()
